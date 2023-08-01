@@ -1,9 +1,9 @@
 package handler
 
 import (
+	"github.com/TechGG1/Library/internal/logging"
+	"github.com/TechGG1/Library/internal/service"
 	"github.com/gorilla/mux"
-	"library/internal/logging"
-	"library/internal/service"
 )
 
 type Handler struct {

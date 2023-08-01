@@ -1,4 +1,4 @@
-module library
+module github.com/TechGG1/Library
 
 go 1.20
 

@@ -1,7 +1,7 @@
 package service
 
 import (
-	"library/internal/logging"
+	"github.com/TechGG1/Library/internal/logging"
 )
 
 //go:generate mockgen -source=service.go -destination=moks/mock.go

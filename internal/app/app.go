@@ -2,9 +2,9 @@ package app
 
 import (
 	"fmt"
+	"github.com/TechGG1/Library/internal/handler"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
-	"library/internal/handler"
 	"log"
 )
 
