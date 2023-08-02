@@ -11,10 +11,17 @@ type Handler struct {
 	logger  logging.Logger
 }
 
-func InitRotes() *mux.Router {
+func NewHandler(service *service.Service, logger logging.Logger) *Handler {
+	return &Handler{
+		service: service,
+		logger:  logger,
+	}
+}
+
+func (h *Handler) InitRoutes() *mux.Router {
 	r := mux.NewRouter()
-	//r.HandleFunc("/book", Controller.NewHomeController).Methods("GET")          //1
-	//r.HandleFunc("/book", Controller.NewSaveBookController).Methods("POST")     //2
+	r.HandleFunc("/book", h.Books).Methods("GET")
+	r.HandleFunc("/book", h.CreateBook).Methods("POST")
 	//r.HandleFunc("/reader", Controller.NewSaveReederController).Methods("POST") //3
 	//r.HandleFunc("/reader", Controller.NewGetReedersController).Methods("GET")  //4
 	//r.HandleFunc("/rent", Controller.NewSaveRentController).Methods("POST")     //5

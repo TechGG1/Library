@@ -11,29 +11,29 @@ import (
 )
 
 type myServer struct {
-	http.Server
+	httpServer  http.Server
 	shutdownReq chan bool
 	reqCount    uint32
 }
 
-func NewServer() *myServer {
+func NewServer(host string, handler http.Handler) *myServer {
 	//create server
 	s := &myServer{
-		Server: http.Server{
-			Addr:         ":8080",
+		httpServer: http.Server{
+			Addr:         host,
+			Handler:      handler,
 			ReadTimeout:  10 * time.Second,
 			WriteTimeout: 10 * time.Second,
 		},
 		shutdownReq: make(chan bool),
 	}
 
-	//register handlers
-	router := InitRotes()
-
-	//set http server handler
-	s.Handler = router
-
 	return s
+}
+
+func (s *myServer) Run() error {
+	log.Printf("Strating server...")
+	return s.httpServer.ListenAndServe()
 }
 
 func (s *myServer) WaitShutdown() {
@@ -54,7 +54,7 @@ func (s *myServer) WaitShutdown() {
 	defer cancel()
 
 	//shutdown the server
-	err := s.Shutdown(ctx)
+	err := s.httpServer.Shutdown(ctx)
 	if err != nil {
 		log.Printf("Shutdown request error: %v", err)
 	}
