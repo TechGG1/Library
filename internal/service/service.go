@@ -1,6 +1,7 @@
 package service
 
 import (
+	"context"
 	"github.com/TechGG1/Library/internal/logging"
 	"github.com/TechGG1/Library/internal/model"
 )
@@ -8,11 +9,13 @@ import (
 //go:generate mockgen -source=service.go -destination=moks/mock.go
 
 type Library interface {
-	Books(limit, page int) ([]model.Book, error)
-	CreateBook(book *model.Book) (int, error)
+	Books(ctx context.Context, limit, page int) ([]model.Book, int, error)
+	CreateBook(ctx context.Context, book *model.Book) (int, error)
 }
 
 type LibraryRepo interface {
+	BooksWithPage(ctx context.Context, limit, page int) ([]model.Book, int, error)
+	CreateBook(ctx context.Context, book *model.Book) (int, error)
 }
 
 type Service struct {

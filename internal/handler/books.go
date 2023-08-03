@@ -18,7 +18,7 @@ func (h *Handler) Books(w http.ResponseWriter, r *http.Request) {
 	page, _ := strconv.Atoi(r.URL.Query().Get("page"))
 	limit, _ := strconv.Atoi(r.URL.Query().Get("limit"))
 
-	books, err := h.service.Books(limit, page)
+	books, pageFromReq, err := h.service.Books(r.Context(), limit, page)
 	if err != nil {
 		h.logger.Log.Error("Error in retrieving Books", zap.Error(err))
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -28,6 +28,7 @@ func (h *Handler) Books(w http.ResponseWriter, r *http.Request) {
 		h.logger.Log.Error("Error in encoding Books", zap.Error(err), zap.String("url", r.URL.Path))
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
+	w.Header().Set("page", strconv.Itoa(pageFromReq))
 	w.WriteHeader(http.StatusOK)
 }
 
@@ -42,7 +43,7 @@ func (h *Handler) CreateBook(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	bookId, err := h.service.CreateBook(&book)
+	bookId, err := h.service.CreateBook(r.Context(), &book)
 	if err != nil {
 		h.logger.Log.Error("Error in retrieving Books", zap.Error(err))
 		http.Error(w, err.Error(), http.StatusInternalServerError)
