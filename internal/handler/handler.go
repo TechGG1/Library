@@ -22,9 +22,10 @@ func (h *Handler) InitRoutes() *mux.Router {
 	r := mux.NewRouter()
 	r.HandleFunc("/book", h.Books).Methods("GET")
 	r.HandleFunc("/book", h.CreateBook).Methods("POST")
-	//r.HandleFunc("/reader", Controller.NewSaveReederController).Methods("POST") //3
-	//r.HandleFunc("/reader", Controller.NewGetReedersController).Methods("GET")  //4
-	//r.HandleFunc("/rent", Controller.NewSaveRentController).Methods("POST")     //5
+	r.HandleFunc("/reader", h.CreateReader).Methods("POST")
+	r.HandleFunc("/reader", h.Reader).Methods("GET")
+	r.HandleFunc("/reader", h.UpdateReader).Methods("PUT")
+	r.HandleFunc("/rent", h.CreateRent).Methods("POST")
 	//r.HandleFunc("/rent/complete", Controller.NewCompleteRentController).Methods("PUT")
 	//r.HandleFunc("/rent", Controller.NewGetRentController).Methods("GET")
 	//r.HandleFunc("/cover", Controller.NewSaveCoverController).Methods("POST")
