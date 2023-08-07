@@ -27,10 +27,7 @@ func (h *Handler) InitRoutes() *mux.Router {
 	r.HandleFunc("/reader", h.UpdateReader).Methods("PUT")
 	r.HandleFunc("/rent", h.CreateRent).Methods("POST")
 	r.HandleFunc("/rent", h.UpdateRent).Methods("PUT")
-	r.HandleFunc("/fine", h.Fine).Methods("GET") //!!
+	r.HandleFunc("/fine", h.Fine).Methods("GET")
 	r.HandleFunc("/rent", h.Rents).Methods("GET")
-	//r.HandleFunc("/cover", Controller.NewSaveCoverController).Methods("POST")
-	//r.HandleFunc("/cover", Controller.NewGetCoverController).Methods("GET")
-	//r.HandleFunc("/coverId", Controller.NewGetCoverController1).Methods("GET")
 	return r
 }
