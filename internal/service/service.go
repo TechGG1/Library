@@ -15,6 +15,9 @@ type Library interface {
 	Readers(ctx context.Context, limit, page int) ([]model.Reader, int, error)
 	UpdateReader(ctx context.Context, reader *model.Reader) (int, error)
 	CreateRent(ctx context.Context, rent *model.Rent) (int, error)
+	UpdateRent(ctx context.Context, rent *model.Rent) (int, error)
+	CalculateFine(ctx context.Context, rentId int) (*model.Rent, error)
+	Rents(ctx context.Context, limit, page, readerId int) ([]model.Rent, int, error)
 }
 
 type LibraryRepo interface {
@@ -24,6 +27,10 @@ type LibraryRepo interface {
 	ReadersWithPage(ctx context.Context, limit, page int) ([]model.Reader, int, error)
 	UpdateReader(ctx context.Context, reader *model.Reader) (int, error)
 	CreateRent(ctx context.Context, rent *model.Rent) (int, error)
+	UpdateRent(ctx context.Context, rent *model.Rent) (int, error)
+	RentById(ctx context.Context, id int) (*model.Rent, error)
+	BookPricePerDay(ctx context.Context, id int) (int, error)
+	RentsWithPage(ctx context.Context, limit, page, readerId int) ([]model.Rent, int, error)
 }
 
 type Service struct {

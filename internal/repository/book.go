@@ -86,3 +86,14 @@ func (r *PgRepo) CreateBook(ctx context.Context, book *model.Book) (int, error) 
 
 	return bookId, nil
 }
+
+func (r *PgRepo) BookPricePerDay(ctx context.Context, id int) (int, error) {
+	var bookId int
+	rowBook := r.db.QueryRowContext(ctx,
+		`select price_per_day from books where id=$1`, id,
+	)
+	if err := rowBook.Scan(&bookId); err != nil {
+		return 0, err
+	}
+	return bookId, nil
+}

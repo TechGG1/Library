@@ -2,11 +2,15 @@ package service
 
 import (
 	"context"
+	"errors"
 	"github.com/TechGG1/Library/internal/model"
 	"time"
 )
 
 func (s *Service) Books(ctx context.Context, limit, page int) ([]model.Book, int, error) {
+	if limit <= 0 || page <= 0 {
+		return nil, -1, errors.New("enter correct limit/page")
+	}
 	books, page, err := s.LibraryRepo.BooksWithPage(ctx, limit, page)
 	if err != nil {
 		return nil, -1, err

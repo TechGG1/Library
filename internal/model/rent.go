@@ -1,10 +1,13 @@
 package model
 
+import "time"
+
 type Rent struct {
-	RentId    string  `json:"rent_id"`
-	BookId    string  `json:"book_id"`
-	ReaderId  string  `json:"reader_id"`
-	FirstDate string  `json:"first_date"`
-	LastDate  string  `json:"last_date"`
-	Fine      float64 `json:"fine"`
+	RentId    int       `json:"id"`
+	BookId    int       `json:"book_id"`
+	ReaderId  int       `json:"reader_id"`
+	FirstDate time.Time `json:"first_date"`
+	LastDate  time.Time `json:"last_date"`
+	Fine      float64   `json:"fine"`
+	Complete  bool      `json:"complete"`
 }

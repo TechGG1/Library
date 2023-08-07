@@ -15,8 +15,18 @@ type ErrResponse struct {
 func (h *Handler) Books(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	page, _ := strconv.Atoi(r.URL.Query().Get("page"))
-	limit, _ := strconv.Atoi(r.URL.Query().Get("limit"))
+	page, err := strconv.Atoi(r.URL.Query().Get("page"))
+	if err != nil {
+		h.logger.Log.Error("Error in parsing page", zap.Error(err))
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	limit, err := strconv.Atoi(r.URL.Query().Get("limit"))
+	if err != nil {
+		h.logger.Log.Error("Error in parsing limit", zap.Error(err))
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
 	books, pageFromReq, err := h.service.Books(r.Context(), limit, page)
 	if err != nil {

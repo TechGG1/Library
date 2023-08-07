@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/TechGG1/Library/internal/model"
 	"go.uber.org/zap"
 	"net/http"
@@ -38,8 +39,18 @@ func (h *Handler) CreateReader(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) Reader(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	page, _ := strconv.Atoi(r.URL.Query().Get("page"))
-	limit, _ := strconv.Atoi(r.URL.Query().Get("limit"))
+	page, err := strconv.Atoi(r.URL.Query().Get("page"))
+	if err != nil {
+		h.logger.Log.Error("Error in parsing page", zap.Error(err))
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	limit, err := strconv.Atoi(r.URL.Query().Get("limit"))
+	if err != nil {
+		h.logger.Log.Error("Error in parsing limit", zap.Error(err))
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
 	readers, pageFromReq, err := h.service.Readers(r.Context(), limit, page)
 	if err != nil {
@@ -66,6 +77,7 @@ func (h *Handler) UpdateReader(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	fmt.Println(reader)
 	readerId, err := h.service.UpdateReader(r.Context(), &reader)
 	if err != nil {
 		h.logger.Log.Error("Error in retrieving reader", zap.Error(err))
