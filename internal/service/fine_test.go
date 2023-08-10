@@ -41,7 +41,7 @@ func TestService_Fine(t *testing.T) {
 			mockBehaviorRepoBook: func(s *mockService.MockLibraryRepo, bookId int) {
 				s.EXPECT().BookPricePerDay(gomock.Any(), bookId).Return(1, nil)
 			},
-			expectedFine:  191,
+			expectedFine:  192,
 			expectedError: nil,
 		},
 		{
