@@ -24,7 +24,10 @@ func (s *Service) CalculateFine(ctx context.Context, rentId int) (*model.Rent, e
 		return rentFromDB, nil
 	}
 	pricePerDay, err := s.LibraryRepo.BookPricePerDay(ctx, rentFromDB.BookId)
-	fineDays := time.Now().Sub(rentFromDB.LastDate).Hours() / 24
+	if err != nil {
+		return nil, err
+	}
+	fineDays := time.Since(rentFromDB.LastDate).Hours() / 24
 	rentFromDB.Fine = math.Round(fineDays) * float64(pricePerDay)
 
 	return rentFromDB, nil

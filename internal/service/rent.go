@@ -19,6 +19,9 @@ func (s *Service) CreateRent(ctx context.Context, rent *model.Rent) (int, error)
 
 func (s *Service) UpdateRent(ctx context.Context, rent *model.Rent) (int, error) {
 	rentWithFine, err := s.CalculateFine(ctx, rent.RentId)
+	if err != nil {
+		return -1, nil
+	}
 	id, err := s.LibraryRepo.UpdateRent(ctx, rentWithFine)
 	if err != nil {
 		return -1, err

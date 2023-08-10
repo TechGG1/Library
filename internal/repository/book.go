@@ -56,7 +56,7 @@ func (r *PgRepo) CreateBook(ctx context.Context, book *model.Book) (int, error) 
 	if err != nil {
 		return -1, err
 	}
-	defer tx.Rollback()
+	defer tx.Rollback() //nolint
 
 	rowBook := tx.QueryRowContext(ctx,
 		`INSERT INTO "books" (name, price_of_book, num_of_copies, cover_photo,price_per_day, reg_date)

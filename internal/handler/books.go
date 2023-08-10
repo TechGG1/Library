@@ -8,10 +8,6 @@ import (
 	"strconv"
 )
 
-type ErrResponse struct {
-	message string `json:"message"`
-}
-
 func (h *Handler) Books(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 

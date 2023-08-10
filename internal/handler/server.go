@@ -13,7 +13,6 @@ import (
 type myServer struct {
 	httpServer  http.Server
 	shutdownReq chan bool
-	reqCount    uint32
 }
 
 func NewServer(host string, handler http.Handler) *myServer {
