@@ -16,6 +16,13 @@ func (r *PgRepo) CreateRent(ctx context.Context, rent *model.Rent) (int, error) 
 		return 0, err
 	}
 
+	rowNum := r.db.QueryRowContext(ctx,
+		`update books set num_of_copies = num_of_copies - 1 where id = $1 returning id`,
+		rent.BookId, rent.ReaderId, rent.FirstDate, rent.LastDate)
+	if err := rowNum.Scan(&rentId); err != nil {
+		return 0, err
+	}
+
 	return rentId, nil
 }
 
@@ -56,13 +63,23 @@ func (r *PgRepo) RentsWithPage(ctx context.Context, limit, page, readerId int) (
 }
 
 func (r *PgRepo) UpdateRent(ctx context.Context, rent *model.Rent) (int, error) {
+	var complete bool
 	var rentId int
 	row := r.db.QueryRowContext(ctx,
 		`UPDATE "rent" SET complete=$1, fine=$2
-               WHERE id = $3 returning id`,
+               WHERE id = $3 returning id, complete`,
 		rent.Complete, rent.Fine, rent.RentId)
-	if err := row.Scan(&rentId); err != nil {
+	if err := row.Scan(&rentId, &complete); err != nil {
 		return -1, err
+	}
+	if complete {
+		rowNum := r.db.QueryRowContext(ctx,
+			`update books set num_of_copies = num_of_copies - 1 where id = $1 returning id`,
+			rent.BookId, rent.ReaderId, rent.FirstDate, rent.LastDate)
+		if err := rowNum.Scan(&rentId); err != nil {
+			return 0, err
+		}
+
 	}
 	return rentId, nil
 }

@@ -9,9 +9,15 @@ import (
 
 func (s *Service) CalculateFine(ctx context.Context, rentId int) (*model.Rent, error) {
 	rentFromDB, err := s.LibraryRepo.RentById(ctx, rentId)
+	if err != nil {
+		return nil, err
+	}
 	rentFromDB.RentId = rentId
 	if err != nil {
 		return nil, err
+	}
+	if rentFromDB.Complete {
+		return rentFromDB, nil
 	}
 	if time.Now().Before(rentFromDB.LastDate) {
 		rentFromDB.Fine = 0

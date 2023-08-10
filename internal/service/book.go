@@ -19,10 +19,22 @@ func (s *Service) Books(ctx context.Context, limit, page int) ([]model.Book, int
 }
 
 func (s *Service) CreateBook(ctx context.Context, book *model.Book) (int, error) {
+	if isEmptyFields(book) {
+		return -1, errors.New("missed information, empty fields")
+	}
 	book.RegDate = time.Now()
 	id, err := s.LibraryRepo.CreateBook(ctx, book)
 	if err != nil {
 		return -1, err
 	}
 	return id, nil
+}
+
+func isEmptyFields(book *model.Book) bool {
+	if book.Name == "" || book.Genre == nil || book.Authors == "" || book.NumOfCopies <= 0 ||
+		book.PriceOfBook <= 0 {
+		return true
+	}
+	return false
+
 }
